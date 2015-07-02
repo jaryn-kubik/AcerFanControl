@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AcerFanControl", "AcerFanControl\AcerFanControl.csproj", "{750AF305-CFFA-4BAD-A3C8-D4AFA77C4958}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F3E3FD97-BCEF-4C66-B53B-57D905332616} = {F3E3FD97-BCEF-4C66-B53B-57D905332616}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AcerFanControlLib", "AcerFanControlLib\AcerFanControlLib.vcxproj", "{F3E3FD97-BCEF-4C66-B53B-57D905332616}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EF2CCC6A-B53E-40A6-A282-8BE3508D879D}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|Win32 = Debug|Win32
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{750AF305-CFFA-4BAD-A3C8-D4AFA77C4958}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{750AF305-CFFA-4BAD-A3C8-D4AFA77C4958}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{750AF305-CFFA-4BAD-A3C8-D4AFA77C4958}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{750AF305-CFFA-4BAD-A3C8-D4AFA77C4958}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{750AF305-CFFA-4BAD-A3C8-D4AFA77C4958}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{750AF305-CFFA-4BAD-A3C8-D4AFA77C4958}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{750AF305-CFFA-4BAD-A3C8-D4AFA77C4958}.Release|Any CPU.Build.0 = Release|Any CPU
+		{750AF305-CFFA-4BAD-A3C8-D4AFA77C4958}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{750AF305-CFFA-4BAD-A3C8-D4AFA77C4958}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{750AF305-CFFA-4BAD-A3C8-D4AFA77C4958}.Release|Win32.ActiveCfg = Release|Any CPU
+		{F3E3FD97-BCEF-4C66-B53B-57D905332616}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{F3E3FD97-BCEF-4C66-B53B-57D905332616}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{F3E3FD97-BCEF-4C66-B53B-57D905332616}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{F3E3FD97-BCEF-4C66-B53B-57D905332616}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F3E3FD97-BCEF-4C66-B53B-57D905332616}.Debug|Win32.Build.0 = Debug|Win32
+		{F3E3FD97-BCEF-4C66-B53B-57D905332616}.Release|Any CPU.ActiveCfg = Release|Win32
+		{F3E3FD97-BCEF-4C66-B53B-57D905332616}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{F3E3FD97-BCEF-4C66-B53B-57D905332616}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{F3E3FD97-BCEF-4C66-B53B-57D905332616}.Release|Win32.ActiveCfg = Release|Win32
+		{F3E3FD97-BCEF-4C66-B53B-57D905332616}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
