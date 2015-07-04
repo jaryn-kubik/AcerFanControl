@@ -5,7 +5,7 @@
         xmlns:dAcerFanControl="clr-namespace:AcerFanControl"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d dAcerFanControl"
-        Title="Acer Fan Control" Height="300" Width="350" SizeToContent="Height" ResizeMode="NoResize"
+        Title="Acer Fan Control" Height="300" Width="350" SizeToContent="Height" ResizeMode="CanMinimize"
         d:DataContext="{dAcerFanControl:FanControl}">
     <Window.Resources>
         <SolidColorBrush x:Key="SliderThumb.Static.Foreground" Color="#FFE5E5E5"/>
