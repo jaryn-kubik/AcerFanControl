@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
@@ -18,8 +17,7 @@ namespace AcerFanControl
             for (double i = 0; i <= range; i += TickFrequency)
             {
                 string label;
-                var labels = getSlider(this).Tag as Dictionary<double, string>;
-                if (labels == null || !labels.TryGetValue(i + Minimum, out label))
+                if (!getSlider(this).Labels.TryGetValue(i + Minimum, out label))
                     label = (i + Minimum).ToString();
 
                 var text = new FormattedText(label, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
@@ -32,12 +30,12 @@ namespace AcerFanControl
             base.OnRender(dc);
         }
 
-        private static Slider getSlider(DependencyObject child) 
+        private static CustomSlider getSlider(DependencyObject child)
         {
             DependencyObject parentObject = VisualTreeHelper.GetParent(child);
             if (parentObject == null)
                 return null;
-            Slider parent = parentObject as Slider;
+            CustomSlider parent = parentObject as CustomSlider;
             return parent ?? getSlider(parentObject);
         }
     }

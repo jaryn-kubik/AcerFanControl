@@ -3,24 +3,19 @@ using System.Xml.Linq;
 
 namespace AcerFanControl
 {
-    public static class Config
+    public class Config
     {
-        private const string xmlPath = "AcerFanControl.xml";
-        private static readonly XDocument document;
+        private readonly XDocument document;
+        private readonly string path;
 
-        static Config()
+        public Config(string name)
         {
-            try { document = XDocument.Load(xmlPath); }
-            catch { document = new XDocument(new XElement("AcerFanControl")); }
+            path = name + ".xml";
+            try { document = XDocument.Load(path); }
+            catch { document = new XDocument(new XElement(name)); }
         }
 
-        public static int Temperature
-        {
-            get { return getValue("Temperature", 80); }
-            set { setValue("Temperature", value); }
-        }
-
-        private static T getValue<T>(string name, T defaultValue = default(T)) where T : IConvertible
+        public T GetValue<T>(string name, T defaultValue = default(T)) where T : IConvertible
         {
             try
             {
@@ -30,13 +25,13 @@ namespace AcerFanControl
             catch { return defaultValue; }
         }
 
-        private static void setValue(string name, object value)
+        public void SetValue(string name, object value)
         {
             XElement element = document.Root.Element(name);
             if (element == null)
                 document.Root.Add(element = new XElement(name));
             element.SetValue(value);
-            document.Save(xmlPath);
+            document.Save(path);
         }
     }
 }

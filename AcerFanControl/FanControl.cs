@@ -8,21 +8,23 @@ namespace AcerFanControl
 {
     public class FanControl : INotifyPropertyChanged
     {
-        private readonly Computer pc;
         private readonly Action<bool> trigger;
+        private readonly DispatcherTimer timer;
+        private readonly Computer pc = new Computer { CPUEnabled = true, GPUEnabled = true };
+        private readonly Config config = new Config("AcerFanControl");
 
         public FanControl(Action<bool> trigger)
         {
             this.trigger = trigger;
-            pc = new Computer { CPUEnabled = true, GPUEnabled = true };
             pc.Open();
 
-            DispatcherTimer t = new DispatcherTimer { Interval = TimeSpan.FromSeconds(60) };
-            t.Tick += t_Tick;
-            t.Start();
+            timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(Interval) };
+            timer.Tick += timer_Tick;
+            timer_Tick(timer, EventArgs.Empty);
+            timer.Start();
         }
 
-        private void t_Tick(object sender, EventArgs e)
+        private void timer_Tick(object sender, EventArgs e)
         {
             CPU.Update();
             OnPropertyChanged("CPUTemp");
@@ -34,7 +36,28 @@ namespace AcerFanControl
             OnPropertyChanged("GPUMax");
             OnPropertyChanged("GPUMin");
 
-            trigger(Math.Max(CPUTemp, GPUTemp) > Config.Temperature);
+            trigger(CPUTemp > CritTemp || GPUTemp > CritTemp);
+        }
+
+        public int CritTemp
+        {
+            get { return config.GetValue("CritTemp", 80); }
+            set
+            {
+                config.SetValue("CritTemp", value);
+                OnPropertyChanged("CritTemp");
+            }
+        }
+
+        public int Interval
+        {
+            get { return config.GetValue("Interval", 30); }
+            set
+            {
+                config.SetValue("Interval", value);
+                timer.Interval = TimeSpan.FromSeconds(value);
+                OnPropertyChanged("Interval");
+            }
         }
 
         public float CPUTemp { get { return getTemp(CPU, s => s.Value); } }

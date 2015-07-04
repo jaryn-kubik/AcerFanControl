@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -10,15 +9,15 @@ namespace AcerFanControl
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new FanControl(onFanControl);
+
             addTicks(mainSlider);
             addTicks(tempSlider);
-            mainSlider.Tag = new Dictionary<double, string> { { 0, "Off" }, { 1, "On" } };
+            addTicks(intervalSlider);
+
+            mainSlider.Labels.Add(0, "Off");
+            mainSlider.Labels.Add(1, "On");
             mainSlider.ValueChanged += mainSlider_ValueChanged;
-
-            tempSlider.Value = Config.Temperature;
-            tempSlider.ValueChanged += tempSlider_ValueChanged;
-
-            DataContext = new FanControl(onFanControl);
         }
 
         private void addTicks(Slider slider)
@@ -48,11 +47,6 @@ namespace AcerFanControl
                     AcerFanControlLib.TurnOff();
             }
             catch (Exception ex) { MessageBox.Show(ex.ToString()); }
-        }
-
-        private void tempSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            Config.Temperature = (int)e.NewValue;
         }
     }
 }

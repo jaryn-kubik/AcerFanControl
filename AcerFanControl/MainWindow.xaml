@@ -5,7 +5,8 @@
         xmlns:dAcerFanControl="clr-namespace:AcerFanControl"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d dAcerFanControl"
-        Title="Acer Fan Control" Height="300" Width="350" SizeToContent="Height" d:DataContext="{dAcerFanControl:FanControl}">
+        Title="Acer Fan Control" Height="300" Width="350" SizeToContent="Height" ResizeMode="NoResize"
+        d:DataContext="{dAcerFanControl:FanControl}">
     <Window.Resources>
         <SolidColorBrush x:Key="SliderThumb.Static.Foreground" Color="#FFE5E5E5"/>
         <SolidColorBrush x:Key="SliderThumb.MouseOver.Background" Color="#FFDCECFC"/>
@@ -269,6 +270,7 @@
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
         <GroupBox Grid.Column="0" Grid.Row="0" Header="State:" VerticalAlignment="Center">
@@ -296,10 +298,15 @@
                 <TextBlock Text="{Binding GPUMin, StringFormat={}{0}°C}" />
             </UniformGrid>
         </GroupBox>
-
+        
         <GroupBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Header="Critical temperature:" VerticalAlignment="Center">
-            <acerFanControl:CustomSlider x:Name="tempSlider"
+            <acerFanControl:CustomSlider x:Name="tempSlider" Value="{Binding CritTemp}"
                         Style="{DynamicResource CustomSliderStyle}" Minimum="70" Maximum="90" TickFrequency="5" />
+        </GroupBox>
+
+        <GroupBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Header="Interval:" VerticalAlignment="Center">
+            <acerFanControl:CustomSlider x:Name="intervalSlider" Value="{Binding Interval}"
+                        Style="{DynamicResource CustomSliderStyle}" Minimum="10" Maximum="60" TickFrequency="10" />
         </GroupBox>
     </Grid>
 </Window>
