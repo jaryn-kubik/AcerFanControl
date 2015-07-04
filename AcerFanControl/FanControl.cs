@@ -8,17 +8,17 @@ namespace AcerFanControl
 {
     public class FanControl : INotifyPropertyChanged
     {
-        private readonly Action<bool> trigger;
-        private readonly DispatcherTimer timer;
         private readonly Computer pc = new Computer { CPUEnabled = true, GPUEnabled = true };
         private readonly Config config = new Config("AcerFanControl");
+        private readonly Func<bool, bool> trigger;
+        private DateTime next = DateTime.MinValue;
 
-        public FanControl(Action<bool> trigger)
+        public FanControl(Func<bool, bool> trigger)
         {
             this.trigger = trigger;
             pc.Open();
 
-            timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(Interval) };
+            DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
             timer.Tick += timer_Tick;
             timer_Tick(timer, EventArgs.Empty);
             timer.Start();
@@ -36,7 +36,8 @@ namespace AcerFanControl
             OnPropertyChanged("GPUMax");
             OnPropertyChanged("GPUMin");
 
-            trigger(CPUTemp > CritTemp || GPUTemp > CritTemp);
+            if (DateTime.Now >= next && trigger(CPUTemp > CritTemp || GPUTemp > CritTemp))
+                next = DateTime.Now.AddSeconds(Interval);
         }
 
         public int CritTemp
@@ -55,7 +56,6 @@ namespace AcerFanControl
             set
             {
                 config.SetValue("Interval", value);
-                timer.Interval = TimeSpan.FromSeconds(value);
                 OnPropertyChanged("Interval");
             }
         }

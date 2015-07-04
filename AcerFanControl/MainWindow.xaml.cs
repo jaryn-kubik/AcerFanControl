@@ -26,13 +26,14 @@ namespace AcerFanControl
                 slider.Ticks.Add(d);
         }
 
-        private void onFanControl(bool value)
+        private bool onFanControl(bool value)
         {
             bool state = ((int)mainSlider.Value) != 0;
             if (state == value)
-                return;
+                return false;
 
             mainSlider.Value = value ? 1 : 0;
+            return true;
         }
 
         private void mainSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

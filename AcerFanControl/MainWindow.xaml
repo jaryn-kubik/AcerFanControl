@@ -299,14 +299,14 @@
             </UniformGrid>
         </GroupBox>
         
-        <GroupBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Header="Critical temperature:" VerticalAlignment="Center">
+        <GroupBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Header="Critical temperature (°C):" VerticalAlignment="Center">
             <acerFanControl:CustomSlider x:Name="tempSlider" Value="{Binding CritTemp}"
                         Style="{DynamicResource CustomSliderStyle}" Minimum="70" Maximum="90" TickFrequency="5" />
         </GroupBox>
 
-        <GroupBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Header="Interval:" VerticalAlignment="Center">
+        <GroupBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Header="Interval (s):" VerticalAlignment="Center">
             <acerFanControl:CustomSlider x:Name="intervalSlider" Value="{Binding Interval}"
-                        Style="{DynamicResource CustomSliderStyle}" Minimum="10" Maximum="60" TickFrequency="10" />
+                        Style="{DynamicResource CustomSliderStyle}" Minimum="30" Maximum="90" TickFrequency="10" />
         </GroupBox>
     </Grid>
 </Window>
