@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Threading;
@@ -9,10 +10,11 @@ namespace AcerFanControl
     public class FanControl : INotifyPropertyChanged
     {
         private readonly Computer pc = new Computer { CPUEnabled = true, GPUEnabled = true };
-        private readonly Config config = new Config("AcerFanControl");
+        private readonly Config config = new Config(nameof(AcerFanControl));
         private readonly Func<bool, bool> trigger;
         private DateTime next = DateTime.MinValue;
 
+        ~FanControl() { pc.Close(); }
         public FanControl(Func<bool, bool> trigger)
         {
             this.trigger = trigger;
@@ -27,14 +29,14 @@ namespace AcerFanControl
         private void timer_Tick(object sender, EventArgs e)
         {
             CPU.Update();
-            OnPropertyChanged("CPUTemp");
-            OnPropertyChanged("CPUMax");
-            OnPropertyChanged("CPUMin");
+            OnPropertyChanged(nameof(CPUTemp));
+            OnPropertyChanged(nameof(CPUMax));
+            OnPropertyChanged(nameof(CPUMin));
 
             GPU.Update();
-            OnPropertyChanged("GPUTemp");
-            OnPropertyChanged("GPUMax");
-            OnPropertyChanged("GPUMin");
+            OnPropertyChanged(nameof(GPUTemp));
+            OnPropertyChanged(nameof(GPUMax));
+            OnPropertyChanged(nameof(GPUMin));
 
             if (DateTime.Now >= next && trigger(CPUTemp > CritTemp || GPUTemp > CritTemp))
                 next = DateTime.Now.AddSeconds(Interval);
@@ -42,44 +44,42 @@ namespace AcerFanControl
 
         public int CritTemp
         {
-            get { return config.GetValue("CritTemp", 80); }
+            get { return config.GetValue(nameof(CritTemp), 80); }
             set
             {
-                config.SetValue("CritTemp", value);
-                OnPropertyChanged("CritTemp");
+                config.SetValue(nameof(CritTemp), value);
+                OnPropertyChanged(nameof(CritTemp));
             }
         }
 
         public int Interval
         {
-            get { return config.GetValue("Interval", 30); }
+            get { return config.GetValue(nameof(Interval), 30); }
             set
             {
-                config.SetValue("Interval", value);
-                OnPropertyChanged("Interval");
+                config.SetValue(nameof(Interval), value);
+                OnPropertyChanged(nameof(Interval));
             }
         }
 
-        public float CPUTemp { get { return getTemp(CPU, s => s.Value); } }
-        public float CPUMax { get { return getTemp(CPU, s => s.Max); } }
-        public float CPUMin { get { return getTemp(CPU, s => s.Min); } }
-        public float GPUTemp { get { return getTemp(GPU, s => s.Value); } }
-        public float GPUMax { get { return getTemp(GPU, s => s.Max); } }
-        public float GPUMin { get { return getTemp(GPU, s => s.Min); } }
+        public List<int> pica { get; } = new List<int>();
+
+        public float CPUTemp => getTemp(CPU, s => s.Value);
+        public float CPUMax => getTemp(CPU, s => s.Max);
+        public float CPUMin => getTemp(CPU, s => s.Min);
+        public float GPUTemp => getTemp(GPU, s => s.Value);
+        public float GPUMax => getTemp(GPU, s => s.Max);
+        public float GPUMin => getTemp(GPU, s => s.Min);
 
         private float getTemp(IHardware hw, Func<ISensor, float?> selector)
-        { return hw.Sensors.Where(s => s.SensorType == SensorType.Temperature).Max(selector) ?? 0; }
+            => hw.Sensors.Where(s => s.SensorType == SensorType.Temperature).Max(selector) ?? 0;
 
-        private IHardware CPU { get { return pc.Hardware.Single(h => h.HardwareType == HardwareType.CPU); } }
-        private IHardware GPU { get { return pc.Hardware.Single(isGPU); } }
-        private bool isGPU(IHardware hw) { return hw.HardwareType == HardwareType.GpuAti || hw.HardwareType == HardwareType.GpuNvidia; }
+        private IHardware CPU => pc.Hardware.Single(h => h.HardwareType == HardwareType.CPU);
+        private IHardware GPU => pc.Hardware.Single(isGPU);
+        private bool isGPU(IHardware hw) => hw.HardwareType == HardwareType.GpuAti || hw.HardwareType == HardwareType.GpuNvidia;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChangedEventHandler eventHandler = PropertyChanged;
-            if (eventHandler != null)
-                eventHandler(this, new PropertyChangedEventArgs(propertyName));
-        }
+        { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); }
     }
 }
