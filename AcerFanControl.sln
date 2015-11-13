@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AcerFanControl", "AcerFanControl\AcerFanControl.csproj", "{750AF305-CFFA-4BAD-A3C8-D4AFA77C4958}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -12,6 +12,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AcerFanControlLib", "AcerFa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EF2CCC6A-B53E-40A6-A282-8BE3508D879D}"
 	ProjectSection(SolutionItems) = preProject
+		drivers.zip = drivers.zip
 		README.md = README.md
 	EndProjectSection
 EndProject

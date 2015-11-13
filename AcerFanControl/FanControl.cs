@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Threading;
@@ -61,8 +60,6 @@ namespace AcerFanControl
                 OnPropertyChanged(nameof(Interval));
             }
         }
-
-        public List<int> pica { get; } = new List<int>();
 
         public float CPUTemp => getTemp(CPU, s => s.Value);
         public float CPUMax => getTemp(CPU, s => s.Max);
