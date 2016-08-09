@@ -18,6 +18,23 @@ namespace AcerFanControl
             mainSlider.Labels.Add(0, "Off");
             mainSlider.Labels.Add(1, "On");
             mainSlider.ValueChanged += mainSlider_ValueChanged;
+
+            System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon
+            {
+                Icon = System.Drawing.SystemIcons.Shield,
+                Visible = true,
+                Text = Title
+            };
+            ni.DoubleClick += (sender, args) =>
+            {
+                Show();
+                WindowState = WindowState.Normal;
+                Topmost = true;
+                Topmost = false;
+            };
+            StateChanged += (sender, args) => { if (WindowState == WindowState.Minimized) Hide(); };
+            Closing += (sender, args) => ni.Dispose();
+            Loaded += (sender, args) => WindowState = WindowState.Minimized;
         }
 
         private void addTicks(Slider slider)
