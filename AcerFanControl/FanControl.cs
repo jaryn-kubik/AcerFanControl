@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Threading;
@@ -10,15 +11,26 @@ namespace AcerFanControl
     {
         private readonly Computer pc = new Computer { CPUEnabled = true, GPUEnabled = true };
         private readonly Config config = new Config(nameof(AcerFanControl));
-        private readonly Func<bool, bool> trigger;
         private DateTime next = DateTime.MinValue;
 
-        ~FanControl() { pc.Close(); }
-        public FanControl(Func<bool, bool> trigger)
+        private Action onTimer;
+        public event Action OnTimer
         {
-            this.trigger = trigger;
-            pc.Open();
+            add { onTimer += value; }
+            remove { onTimer -= value; }
+        }
 
+        private Func<bool, bool> onTrigger;
+        public event Func<bool, bool> OnTrigger
+        {
+            add { onTrigger += value; }
+            remove { onTrigger -= value; }
+        }
+
+        ~FanControl() { pc.Close(); }
+        public FanControl()
+        {
+            pc.Open();
             DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
             timer.Tick += timer_Tick;
             timer_Tick(timer, EventArgs.Empty);
@@ -27,18 +39,33 @@ namespace AcerFanControl
 
         private void timer_Tick(object sender, EventArgs e)
         {
+            if (!getSensors(CPU).Any())
+            {
+                pc.CPUEnabled = false;
+                pc.CPUEnabled = true;
+            }
             CPU.Update();
             OnPropertyChanged(nameof(CPUTemp));
             OnPropertyChanged(nameof(CPUMax));
             OnPropertyChanged(nameof(CPUMin));
 
+            if (!getSensors(GPU).Any())
+            {
+                pc.GPUEnabled = false;
+                pc.GPUEnabled = true;
+            }
             GPU.Update();
             OnPropertyChanged(nameof(GPUTemp));
             OnPropertyChanged(nameof(GPUMax));
             OnPropertyChanged(nameof(GPUMin));
 
-            if (DateTime.Now >= next && trigger(CPUTemp > CritTemp || GPUTemp > CritTemp))
-                next = DateTime.Now.AddSeconds(Interval);
+            if (DateTime.Now >= next)
+            {
+                bool? result = onTrigger?.Invoke(CPUTemp > CritTemp || GPUTemp > CritTemp);
+                if (result.HasValue && result.Value)
+                    next = DateTime.Now.AddSeconds(Interval);
+            }
+            onTimer?.Invoke();
         }
 
         public int CritTemp
@@ -68,8 +95,8 @@ namespace AcerFanControl
         public float GPUMax => getTemp(GPU, s => s.Max);
         public float GPUMin => getTemp(GPU, s => s.Min);
 
-        private float getTemp(IHardware hw, Func<ISensor, float?> selector)
-            => hw.Sensors.Where(s => s.SensorType == SensorType.Temperature).Max(selector) ?? 0;
+        private IEnumerable<ISensor> getSensors(IHardware hw) => hw.Sensors.Where(s => s.SensorType == SensorType.Temperature);
+        private float getTemp(IHardware hw, Func<ISensor, float?> selector) => getSensors(hw).Max(selector) ?? 0;
 
         private IHardware CPU => pc.Hardware.Single(h => h.HardwareType == HardwareType.CPU);
         private IHardware GPU => pc.Hardware.Single(isGPU);
