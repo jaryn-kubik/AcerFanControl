@@ -8,10 +8,18 @@ namespace AcerFanControl
     {
         public App()
         {
+            DispatcherUnhandledException += (s, e) => MessageBox.Show(e.ToString());
+            AppDomain.CurrentDomain.UnhandledException += (s, e) => MessageBox.Show(e.ToString());
+
+            ScheduleTask();
+        }
+
+        private void ScheduleTask()
+        {
             string[] args = Environment.GetCommandLineArgs();
             int delay;
             if (args.Length == 0 || !int.TryParse(args[0], out delay))
-                delay = 200;
+                delay = 300;
 
             string assemblyPath = typeof(App).Assembly.Location;
             string delayStr = TimeSpan.FromSeconds(delay).ToString("\\0\\0mm\\:ss");

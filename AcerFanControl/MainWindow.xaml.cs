@@ -53,12 +53,19 @@ namespace AcerFanControl
             return Brushes.White;
         }
 
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool DestroyIcon(IntPtr handle);
+
         private void onTimer()
         {
             float temp = Math.Max(fanControl.CPUTemp, fanControl.GPUTemp);
             graphics.Clear(Color.Transparent);
             graphics.DrawString(((int)temp).ToString(), drawFont, getBrush(temp), -4f, -2);
+
+            Icon old = trayIcon.Icon;
             trayIcon.Icon = System.Drawing.Icon.FromHandle(bitmap.GetHicon());
+            if (old != null)
+                DestroyIcon(old.Handle);
         }
 
         private void addTicks(Slider slider)
