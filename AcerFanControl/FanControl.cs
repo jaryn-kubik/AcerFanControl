@@ -12,6 +12,7 @@ namespace AcerFanControl
         private readonly Computer pc = new Computer { CPUEnabled = true, GPUEnabled = true };
         private readonly Config config = new Config(nameof(AcerFanControl));
         private DateTime next = DateTime.MinValue;
+        private DateTime sensorNext = DateTime.MinValue;
 
         private Action onTimer;
         public event Action OnTimer
@@ -37,23 +38,34 @@ namespace AcerFanControl
             timer.Start();
         }
 
-        private void timer_Tick(object sender, EventArgs e)
+        private bool checkSensors()
         {
+            bool changed = false;
             if (!getSensors(CPU).Any())
             {
                 pc.CPUEnabled = false;
                 pc.CPUEnabled = true;
+                changed = true;
             }
+            if (!getSensors(GPU).Any())
+            {
+                pc.GPUEnabled = false;
+                pc.GPUEnabled = true;
+                changed = true;
+            }
+            return changed;
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            if (DateTime.Now >= sensorNext && checkSensors())
+                sensorNext = DateTime.Now.AddSeconds(60);
+
             CPU.Update();
             OnPropertyChanged(nameof(CPUTemp));
             OnPropertyChanged(nameof(CPUMax));
             OnPropertyChanged(nameof(CPUMin));
 
-            if (!getSensors(GPU).Any())
-            {
-                pc.GPUEnabled = false;
-                pc.GPUEnabled = true;
-            }
             GPU.Update();
             OnPropertyChanged(nameof(GPUTemp));
             OnPropertyChanged(nameof(GPUMax));

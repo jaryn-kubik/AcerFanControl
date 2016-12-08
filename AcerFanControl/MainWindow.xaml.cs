@@ -46,9 +46,9 @@ namespace AcerFanControl
 
         private Brush getBrush(float temp)
         {
-            if (temp > 80)
+            if (temp >= 80)
                 return Brushes.Yellow;
-            if (temp > 70)
+            if (temp >= 70)
                 return Brushes.LawnGreen;
             return Brushes.White;
         }
