@@ -1,8 +1,10 @@
+## IMPORTANT - if you get an error "Invalid device handle" after any bigger Windows update, try reinstalling the drivers
+
 ### What it does
 - Monitors the CPU/GPU temperature and turns the fan to maximum speed when the set temperature is reached.
 - Tested on acer aspire V3-571g, should work on 5750g.
 
-### Usage:
+### Usage
 1. [Install the drivers provided by Acer](https://raw.githubusercontent.com/jaryn-kubik/AcerFanControl/master/drivers.zip) (run common.exe)
 2. [Download the latest release](https://github.com/jaryn-kubik/AcerFanControl/releases/latest)
 3. Unzip it somewhere and start it up.
